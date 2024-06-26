@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>Edit Task</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-control-label {
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group-text {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        textarea.form-control {
+            height: 100px;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-outline-primary {
+            background-color: transparent;
+            color: #007bff;
+            border: 1px solid #007bff;
+            margin-top: 1rem;
+        }
+
+        .pull-right {
+            float: right;
+        }
+
+        .ml-3 {
+            margin-left: 1rem;
+        }
+
+        .my-highest-header {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('create-new-task')"></th:block> /*/-->
+</header>
+
+<main class="container">
+    <div class="card mb-3">
+
+        <h1 class="my-highest-header card-header">Edit Task</h1>
+
+        <div class="card card-body">
+
+            <form th:action="@{'/task/edit/'+ ${task.id}}" th:object="${task}" method="post">
+                <input type="hidden" th:field="*{id}"/>
+
+                <!--name-->
+                <div class="form-group">
+                    <label for="name" class="form-control-label">Task name</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-pen"></i></span>
+                        </div>
+                        <input type="text" class="form-control"
+                               th:field="*{name}" id="name"/>
+                    </div>
+                    <div class="text text-danger"
+                         th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+
+                    </div>
+                </div>
+
+                <!--description-->
+                <div class="form-group">
+                    <label for="description" class="form-control-label">Task description</label>
+                    <textarea class="form-control"
+                              th:field="*{description}" id="description">  </textarea>
+                    <div class="text text-danger"
+                         th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+
+                    </div>
+                </div>
+
+                <!--date-->
+                <div class="form-group">
+                    <label for="date" class="form-control-label">Date</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="date" class="form-control"
+                               th:attr="value=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')},
+                                    min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                               th:field="*{date}" id="date"/>
+                    </div>
+                    <div class="text text-danger"
+                         th:if="${#fields.hasErrors('date')}" th:errors="*{date}">
+
+                    </div>
+                </div>
+
+                <input type="submit" value="Submit" class="btn btn-primary"/>
+                <button type="reset" class="btn btn-outline-primary pull-right ml-3">Reset</button>
+                <a href="/tasks" type="reset" class="btn btn-outline-primary pull-right ml-3">Cancel</a>
+            </form>
+        </div>
+    </div>
+</main>
+
+
+<!--<footer class="footer">-->
+<!--    &lt;!&ndash;/*/ <th:block th:include="fragments/footer :: footer"></th:block> /*/&ndash;&gt;-->
+<!--</footer>-->
+
+</body>
+</html>

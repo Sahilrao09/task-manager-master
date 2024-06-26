@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>Task Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&family=Playwrite+NG+Modern:wght@100..400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playwrite IT Moderna', 'Playwrite NG Modern', sans-serif;
+            font-size: 20px;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #0a1626;
+            color: #343a40;
+        }
+
+        /* Header */
+        header {
+            background: #343a40;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Main Container */
+        main.container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /* Headings */
+        h1.display-4 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        h2.my-second-header {
+            font-size: 1.75rem;
+            margin-top: 30px;
+            color: #6c757d;
+        }
+
+        /* Paragraphs */
+        p.lead {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Horizontal Line */
+        hr.my-4 {
+            border: 0;
+            border-top: 1px solid #e0e0e0;
+            margin: 20px 0;
+        }
+
+        /* Unordered Lists */
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        .admin-section {
+            background-color: #d1ecf1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .admin-section h2 {
+            color: #0c5460;
+        }
+
+        /* Employee Section */
+        .employee-section {
+            background-color: #d4edda;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .employee-section h2 {
+            color: #155724;
+        }
+
+        /* Authorized User Section */
+        .authorized-section {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .authorized-section h2 {
+            color: #856404;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main.container {
+                padding: 10px;
+            }
+
+            h1.display-4 {
+                font-size: 2rem;
+            }
+
+            h2.my-second-header {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('home')"></th:block> /*/-->
+    <h3></h3>
+</header>
+
+<main class="container">
+    <h1 class="display-4">Task Manager Application</h1>
+    <p class="lead"> <i>Organize - Implement - Achieve</i> </p>
+
+    <hr class="my-4">
+    <p>Role based access only</p>
+    <p>Below are the specification of role based access and data manipulation power : </p>
+
+
+    <div class="admin-section">
+        <p>Admin role:</p>
+        <ul>
+            <li>Create task and assign task to any user</li>
+            <li>View list of all users with possibility to delete user</li>
+            <li>View list of all tasks with editing or deleting task</li>
+        </ul>
+    </div>
+
+    <div class="employee-section">
+        <p>Employee role:</p>
+        <ul>
+            <li>Create task only for himself</li>
+            <li>View list of all users with no action allowed</li>
+            <li>View list of all tasks but edit or delete only tasks for which he is responsible</li>
+        </ul>
+    </div>
+
+    <div class="authorized-section">
+        <p>Any authorized user:</p>
+        <ul>
+            <li>View his own profile</li>
+            <li>Switch task as completed/uncompleted</li>
+        </ul>
+    </div>
+
+
+    <h2 class="my-second-header">Test users:</h2>
+    <ul>
+        <li>manager@mail.com, password: 112233</li>
+        <li>ann@mail.com, password: 112233</li>
+        <li>mark@mail.com, password: 112233</li>
+    </ul>
+</main>
+
+<!--<footer class="footer">-->
+<!--    &lt;!&ndash;/*/ <th:block th:include="fragments/footer :: footer"></th:block> /*/&ndash;&gt;-->
+<!--</footer>-->
+
+</body>
+</html>

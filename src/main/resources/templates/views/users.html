@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>Users List</title>
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .table-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table th {
+            font-weight: bold;
+        }
+
+        .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-outline-danger:hover {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            background-color: #dc3545;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            justify-content: space-between;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .table th.d-none.d-lg-table-cell,
+            .table td.d-none.d-lg-table-cell {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .col-sm-10 {
+                padding-right: 0;
+            }
+
+            .col-6.col-sm-2 {
+                padding-left: 0;
+            }
+
+            .table th.d-none.d-md-table-cell,
+            .table td.d-none.d-md-table-cell {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .my-photo-miniature {
+                max-width: 50px;
+                height: auto;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('users-list')"></th:block> /*/-->
+</header>
+
+<main class="container">
+    <div class="card mb-3">
+
+        <h1 class="my-highest-header card-header">Users List</h1>
+
+        <div class="card card-body">
+            <table class="table table-hover text-left">
+
+                <thead class="table-info">
+                <tr>
+                    <th>Name</th>
+                    <th class="d-none d-lg-table-cell">Email</th>
+                    <th>Tasks in progress</th>
+                    <th class="d-none d-md-table-cell">Tasks completed</th>
+                    <th th:if="${isAdminSigned}">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="user:${users}">
+
+                    <!--Photo & name-->
+                    <td>
+                        <img th:src="${user.photo}" alt="user photo"
+                             class="embed-responsive embed-responsive-3by4 d-inline my-photo-miniature"/>
+                        <div th:text="${user.name}" class=" d-inline ml-1"></div>
+                    </td>
+
+                    <!--Email-->
+                    <td th:text="${user.email}" class="d-none d-lg-table-cell"></td>
+
+                    <!--Tasks in  progress-->
+                    <td th:if="${user.getTasksInProgress().size() gt 0}">
+                        <ol class="pl-3">
+                            <li th:each="t : ${user.getTasksInProgress()}">
+                                <span th:text="${t.name}"></span>
+                                <!--/*/ <th:block th:include="fragments/days-left-until-deadline :: daysLeft(${t})"></th:block> /*/-->
+                            </li>
+                        </ol>
+                    </td>
+                    <td th:if="${user.getTasksInProgress().size()==0}">0</td>
+
+                    <!--Tasks completed-->
+                    <td th:if="${user.getTasksCompleted().size() gt 0}" class="d-none d-md-table-cell">
+                        <ol class="pl-3">
+                            <li th:each="t : ${user.getTasksCompleted()}">
+                                <span th:text="${t.name}"></span>
+                            </li>
+                        </ol>
+                    </td>
+                    <td th:if="${user.getTasksCompleted().size()==0}" class="d-none d-md-table-cell">0</td>
+
+                    <!--Delete button-->
+                    <td th:if="${isAdminSigned and !user.isAdmin()}">
+                        <a data-toggle="modal" data-target="#modal-soft-delete"
+                           th:attr="data-target='#modal-soft-delete'+${user.id}"
+                           th:href="${'user/delete/' + user.id}"
+                           class="btn btn-outline-danger btn-sm">Delete
+                        </a>
+                    </td>
+                    <td th:if="${isAdminSigned and user.isAdmin()}"></td>
+
+                    <!--modal for delete confirmation-->
+                    <div class="modal" th:id="modal-soft-delete+${user.id }">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title text-danger">Delete Confirmation</h3>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p th:text="${'Are you sure you want to delete user: &nbsp&nbsp'+user.name+'?'}"></p>
+                                    <small>After this action, the tasks will be retained, but without the owner.</small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                                        Cancel
+                                    </button>
+                                    <a th:href="${'/user/delete/' + user.id}">
+                                        <span class="btn btn-danger">Delete</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end of modal for delete confirmation-->
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+
+<!--remain scroll position after redirect-->
+<script src="js/main.js"></script>
+
+</body>
+</html>
